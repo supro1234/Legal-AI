@@ -55,9 +55,21 @@ export default function ResultCard({ item, type, index }) {
           </div>
         )}
         {isNegotiate ? (
-          <p style={{ margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.55 }}>
-            <strong style={{ color: 'var(--accent)' }}>#{index + 1}</strong> {item}
-          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <p style={{ margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.55 }}>
+              <strong style={{ color: 'var(--accent)' }}>Original:</strong> {item.clause || item}
+            </p>
+            {item.counterProposal && (
+              <p style={{ margin: 0, fontSize: 12.5, color: 'var(--success)', lineHeight: 1.55 }}>
+                <strong style={{ color: 'var(--success)' }}>Counter:</strong> {item.counterProposal}
+              </p>
+            )}
+            {item.stateSpecificVariations && (
+              <p style={{ margin: 0, fontSize: 11, color: 'var(--muted)', lineHeight: 1.45, fontStyle: 'italic' }}>
+                📍 {item.stateSpecificVariations}
+              </p>
+            )}
+          </div>
         ) : (
           <p style={{ margin: 0, fontSize: 12.5, color: 'var(--text)', lineHeight: 1.55 }}>
             {isRedFlag ? item.explanation : item}

@@ -245,9 +245,9 @@ LexGuard is engineered to be resistant to common web attacks, employing a defens
 |---|---|---|
 | 📸 Live Photo OCR | ✅ Done | Extract text from photographed paper contracts instantly via Tesseract.js |
 | 🗂️ Bottom Navigation | ✅ Done | Modern 4-tab app layout (Analyze, Samples, History, Features) |
+| 🤝 Clause-by-Clause Negotiation | ✅ Done | AI suggests specific counter-clauses for each red flag, tailored for all Indian states |
 | 📦 Batch Auditing | 🔜 Planned | Upload and analyse multiple contracts at once with a comparison table |
 | 🌍 Multi-language Support | 🔜 Planned | Analyse contracts in Hindi, Tamil, Bengali and other Indian languages |
-| 🤝 Clause-by-Clause Negotiation | 🔜 Planned | AI suggests specific counter-clauses for each red flag |
 | 📊 Risk Trend Dashboard | 🔜 Planned | Historical risk trends across all your scanned contracts |
 | 🔔 Real-time Monitoring | 🔜 Planned | Watch mode for T&C / Privacy Policy pages — get alerted when they change |
 | 🧑‍⚖️ Jurisdiction Mode | 🔜 Planned | Jurisdiction-aware analysis (India, US, UK, EU) citing specific laws |

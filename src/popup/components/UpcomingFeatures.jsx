@@ -11,8 +11,8 @@ const FEATURES = [
   },
   {
     icon: Target,
-    title: 'AI Clause Rewriter',
-    desc: 'Auto-rewrite unfair clauses into balanced, legally sound alternatives.',
+    title: 'Clause-by-Clause Negotiation',
+    desc: 'AI suggests specific, legally sound counter-clauses tailored for all Indian states.',
     tag: 'Coming Q3',
     color: '#3ecf8e',
   },
