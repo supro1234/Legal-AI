@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: lexguard-ai
+    env: node
+    buildCommand: npm install && npm run build && cd server && npm install
+    startCommand: cd server && npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: PORT
+        value: 10000
