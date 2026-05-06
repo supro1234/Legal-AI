@@ -9,6 +9,18 @@ const DOC_TYPES = [
   { id: 'employment',    emoji: '📑', label: 'Employment / HR Agreement' },
 ]
 
+const JURISDICTIONS = [
+  { value: 'India',               label: '🇮🇳 India' },
+  { value: 'India - West Bengal', label: '🇮🇳 India (West Bengal)' },
+  { value: 'India - Maharashtra', label: '🇮🇳 India (Maharashtra)' },
+  { value: 'India - Karnataka',   label: '🇮🇳 India (Karnataka)' },
+  { value: 'India - Delhi',       label: '🇮🇳 India (Delhi)' },
+  { value: 'India - Tamil Nadu',  label: '🇮🇳 India (Tamil Nadu)' },
+  { value: 'US',                  label: '🇺🇸 United States' },
+  { value: 'UK',                  label: '🇬🇧 United Kingdom' },
+  { value: 'EU',                  label: '🇪🇺 European Union' },
+]
+
 const containerVariants = {
   hidden:  {},
   visible: { transition: { staggerChildren: 0.07 } },
@@ -18,17 +30,56 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 300, damping: 28 } },
 }
 
-export default function DocTypeSelector({ selected, onSelect }) {
+export default function DocTypeSelector({ selected, onSelect, jurisdiction, onJurisdictionChange }) {
   return (
     <div>
-      <p style={{ color: 'var(--muted)', fontSize: 12, marginBottom: 10, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-        Step 1 — Select Document Type
-      </p>
+      {/* ── Step label ── */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+        <p style={{ color: 'var(--muted)', fontSize: 12, margin: 0, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+          Step 1 — Document Type
+        </p>
+
+        {/* ── Jurisdiction dropdown ── */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', letterSpacing: '0.04em' }}>
+            Jurisdiction:
+          </span>
+          <select
+            value={jurisdiction || 'India'}
+            onChange={e => onJurisdictionChange?.(e.target.value)}
+            aria-label="Select jurisdiction"
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              padding: '4px 8px',
+              paddingRight: 24,
+              borderRadius: 8,
+              border: '1px solid var(--border)',
+              background: 'var(--surface)',
+              color: 'var(--text)',
+              cursor: 'pointer',
+              outline: 'none',
+              fontFamily: 'inherit',
+              appearance: 'none',
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'right 6px center',
+              minWidth: 140,
+            }}
+          >
+            {JURISDICTIONS.map(j => (
+              <option key={j.value} value={j.value}>{j.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* ── Document type cards ── */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10 }}
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10 }}
       >
         {DOC_TYPES.map((dt) => {
           const isSelected = selected === dt.id
@@ -65,4 +116,4 @@ export default function DocTypeSelector({ selected, onSelect }) {
   )
 }
 
-export { DOC_TYPES }
+export { DOC_TYPES, JURISDICTIONS }

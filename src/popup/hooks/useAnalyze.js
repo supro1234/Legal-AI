@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { analyzeWithOpenRouter } from '../../utils/openrouter.js'
+import { DEMO_FALLBACK_RESULT } from '../../utils/sampleContracts.js'
 
 // ── Storage helpers (extension + web) ────────────────────────────────────────
 const HISTORY_KEY = 'lexguard_history'
@@ -46,6 +47,33 @@ export async function loadHistory() {
   }
 }
 
+// ── Timeout + fallback wrapper ────────────────────────────────────────────────
+const API_TIMEOUT_MS = 12000
+
+async function callWithTimeout(apiKey, documentType, safeText, model) {
+  const timeoutPromise = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error('timeout')), API_TIMEOUT_MS)
+  )
+  try {
+    const response = await Promise.race([
+      analyzeWithOpenRouter(apiKey, documentType, safeText, model),
+      timeoutPromise,
+    ])
+    return response
+  } catch (e) {
+    if (e.message === 'timeout') {
+      // Graceful fallback — return demo result tagged as fallback
+      console.warn('[LexGuard] API timeout — using demo fallback result')
+      return {
+        result:    { ...DEMO_FALLBACK_RESULT, _isFallback: true },
+        modelUsed: 'demo-fallback',
+        fromCache: false,
+      }
+    }
+    throw e  // re-throw real errors (auth, network, etc.)
+  }
+}
+
 export function useAnalyze() {
   const [status,    setStatus]    = useState('idle')   // idle | scanning | done | error
   const [result,    setResult]    = useState(null)
@@ -53,7 +81,7 @@ export function useAnalyze() {
   const [modelUsed, setModelUsed] = useState(null)
   const [fromCache, setFromCache] = useState(false)
 
-  const analyze = useCallback(async ({ contractText, documentType, apiKey, model }) => {
+  const analyze = useCallback(async ({ contractText, documentType, apiKey, model, jurisdiction }) => {
     setStatus('scanning')
     setResult(null)
     setError(null)
@@ -67,12 +95,13 @@ export function useAnalyze() {
       const safeText = contractText.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').slice(0, 8000)
       if (safeText.trim().length < 30) throw new Error('Contract text is too short to analyse.')
 
-      const response = await analyzeWithOpenRouter(apiKey, documentType, safeText, model)
+      const response = await callWithTimeout(apiKey, documentType, safeText, model)
 
       const scan = {
         id:           Date.now().toString(),
         date:         new Date().toISOString(),
         documentType: documentType,
+        jurisdiction: jurisdiction || 'India',
         model:        response.modelUsed,
         riskScore:    response.result.riskScore,
         riskLevel:    response.result.riskLevel,

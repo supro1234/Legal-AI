@@ -14,8 +14,9 @@ Powered by **OpenRouter's free AI routing**, it automatically selects the best a
 |---|---|
 |  AI Engine | OpenRouter Auto-Router (free models, no paid key needed) |
 |  Deployment | Works as Chrome Extension **and** a deployed Web App |
-|  Background | Live Three.js network animation — adapts to Light/Dark mode |
-| Security | Helmet CSP headers, rate limiting, input sanitisation, no key storage in DB |
+|  Input Modes | Drop PDFs, Paste Text, or **Live Photo OCR** via Tesseract.js (Hindi+English) |
+|  Background | Live Three.js network animation — adapts to True Black Dark Mode / Light mode |
+| Security | Helmet CSP, Tiered Rate Limits, Prompt Injection Shield, Session-only API keys |
 |  Output | Risk score (0–100), Red Flags, Pros/Cons, Negotiation Tips, PDF Export |
 |  History | Session-scoped scan history (extension: `chrome.storage`, web: `sessionStorage`) |
 |  Responsive | Popup (400px) ↔ Fullscreen (800px) with native Fullscreen API on web |
@@ -221,17 +222,19 @@ The repo includes a `render.yaml` file for zero-config deployment.
 
 ## 🔒 Security Overview
 
-LexGuard is designed to be resistant to common web attacks:
+LexGuard is engineered to be resistant to common web attacks, employing a defense-in-depth approach:
 
 | Attack Vector | Protection |
 |---|---|
-| **XSS** | Content Security Policy via `helmet`, no `innerHTML`, React's built-in escaping |
-| **Injection** | Input sanitised client-side and server-side (null bytes, control chars stripped) |
-| **DoS / Abuse** | Rate limiting: 60 req/min global, 10 req/min on `/analyze` specifically |
-| **CORS Abuse** | Strict origin allowlist (regex for extensions + explicit domains only) |
+| **XSS** | Strict Content Security Policy (`helmet`), React's auto-escaping, no `innerHTML` |
+| **Prompt Injection** | `sanitizeInput` middleware scans for jailbreaks (`DAN`, `ignore instructions`) and redacts them in-place |
+| **SQL/Data Injection** | Null bytes, control chars, zero-width chars, and RTL overrides stripped before model inference |
+| **DoS / Abuse** | Tiered rate limiting: 60 req/min global, 8 req/min per IP/UA on `/analyze`, 3 req/5s burst limiter |
+| **CORS Abuse** | Hardened origin allowlist (regex for extensions + explicit domains only) |
+| **Reconnaissance** | Response hardening strips `X-Powered-By` and `Server` headers. Suspicious payloads logged for audit |
 | **Clickjacking** | `X-Frame-Options: DENY` header |
-| **API Key Theft** | Keys stored in `sessionStorage` / `chrome.storage.session` only — never in DB, never in URL |
-| **Error Leakage** | Server returns generic error messages in production, never stack traces |
+| **API Key Theft** | Keys stored exclusively in ephemeral `sessionStorage` (Web) / `chrome.storage.session` (Extension) — completely wiped when browser closes |
+| **Error Leakage** | Server returns generic error messages in production, masking stack traces |
 | **Oversized Payloads** | Body limit: `50kb`, `contractText` validated to max 40,000 chars server-side |
 
 ---
@@ -240,8 +243,9 @@ LexGuard is designed to be resistant to common web attacks:
 
 | Feature | Status | Description |
 |---|---|---|
+| 📸 Live Photo OCR | ✅ Done | Extract text from photographed paper contracts instantly via Tesseract.js |
+| 🗂️ Bottom Navigation | ✅ Done | Modern 4-tab app layout (Analyze, Samples, History, Features) |
 | 📦 Batch Auditing | 🔜 Planned | Upload and analyse multiple contracts at once with a comparison table |
-| 📤 Multi-format Import | 🔜 Planned | Drag-and-drop PDF / DOCX / image contracts (OCR extraction) |
 | 🌍 Multi-language Support | 🔜 Planned | Analyse contracts in Hindi, Tamil, Bengali and other Indian languages |
 | 🤝 Clause-by-Clause Negotiation | 🔜 Planned | AI suggests specific counter-clauses for each red flag |
 | 📊 Risk Trend Dashboard | 🔜 Planned | Historical risk trends across all your scanned contracts |
