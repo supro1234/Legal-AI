@@ -2,6 +2,8 @@
 
 > **"Nobody reads contracts. We built the AI that reads them for you."**
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://legal-ai-black-five.vercel.app/)
+
 LexGuard AI is a universal **Web Application + Chrome/Edge Extension** that analyses any legal document — rental deeds, PG agreements, employment contracts, Terms of Service, or Privacy Policies — and delivers a plain-English risk report with a stunning, responsive 3D animated interface.
 
 Powered by **OpenRouter's free AI routing**, it automatically selects the best available model (Llama 4, DeepSeek V3, Mistral) with no paid API required.
@@ -194,29 +196,27 @@ This creates the `dist/` folder — your installable extension package.
 
 ---
 
-## 🚀 Method 3 — Deploy to Render (Live Web App)
+## 🚀 Method 3 — Deploy to Vercel (Live Web App)
 
-The repo includes a `render.yaml` file for zero-config deployment.
+The repository includes a `vercel.json` file for zero-config fullstack deployment (frontend + serverless API).
+
+**Live Demo:** [https://legal-ai-black-five.vercel.app/](https://legal-ai-black-five.vercel.app/)
 
 ### Steps
 
-1. Push your repository to GitHub
-2. Go to [render.com](https://render.com) → **New** → **Blueprint**
-3. Connect your GitHub repository
-4. Render detects `render.yaml` automatically and:
-   - Installs frontend dependencies (`npm install`)
-   - Builds the Vite production bundle (`npm run build`)
-   - Installs backend dependencies (`cd server && npm install`)
-   - Starts the Express server (`cd server && npm start`)
-5. Your app is live at `https://your-app-name.onrender.com`
+1. Push your repository to GitHub.
+2. Go to [Vercel](https://vercel.com/) → **Add New** → **Project**.
+3. Import your GitHub repository.
+4. Leave all settings as default (Framework: Vite, Build: `vite build`, Output: `dist`).
+5. Click **Deploy**. Vercel will automatically build the React frontend and deploy the Express backend as serverless functions.
 
-### Set Environment Variables on Render
+### Set Environment Variables on Vercel
+
+*(Optional) Vercel automatically sets `NODE_ENV=production`. If you hardcode your API keys on the backend instead of passing them from the client, you can add them here.*
 
 | Variable | Value | Required |
 |---|---|---|
-| `NODE_ENV` | `production` | ✅ |
-| `PORT` | `10000` | ✅ (set by Render automatically) |
-| `ALLOWED_ORIGIN` | `https://your-app-name.onrender.com` | ✅ (for CORS) |
+| `ALLOWED_ORIGIN` | `https://legal-ai-black-five.vercel.app` | ✅ (for CORS security) |
 
 ---
 
@@ -272,7 +272,7 @@ LexGuard is engineered to be resistant to common web attacks, employing a defens
 | AI Infrastructure | OpenRouter API | — |
 | Backend | Node.js + Express | 5 |
 | Security | Helmet.js | — |
-| Deployment | Render | — |
+| Deployment | Vercel | — |
 
 ---
 
