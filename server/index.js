@@ -136,6 +136,10 @@ app.use((err, _req, res, _next) => {
   })
 })
 
-app.listen(PORT, () => {
-  console.log(`\n🛡️  LexGuard AI running on http://localhost:${PORT}`)
-})
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n🛡️  LexGuard AI running on http://localhost:${PORT}`)
+  })
+}
+
+module.exports = app
