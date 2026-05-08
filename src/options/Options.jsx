@@ -85,7 +85,7 @@ export default function Options() {
     : { bg: 'rgba(245,158,11,0.15)',  color: '#f59e0b', border: 'rgba(245,158,11,0.3)'  }
 
   return (
-    <div style={{ padding: 28, maxWidth: 480, margin: '0 auto', fontFamily: 'Inter, sans-serif', background: '#06060f', color: '#f1f5f9', minHeight: '100vh' }}>
+    <div style={{ padding: 28, maxWidth: 480, margin: '0 auto', fontFamily: "'Inter', sans-serif", background: '#06060f', color: '#f1f5f9', minHeight: '100vh' }}>
       <h2 style={{ margin: '0 0 4px', fontSize: 20, fontWeight: 800 }}>🛡️ LexGuard — Settings</h2>
       <p style={{ color: '#94a3b8', fontSize: 13, margin: '0 0 28px' }}>
         One key controls access to all AI models.

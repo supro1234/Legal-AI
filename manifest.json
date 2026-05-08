@@ -36,6 +36,6 @@
     "http://localhost:3001/*"
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; object-src 'self'"
   }
 }

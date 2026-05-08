@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion'
 
 const DOC_TYPES = [
-  { id: 'rent_lease',    emoji: '🏠', label: 'Rent / House Lease' },
-  { id: 'pg_hostel',     emoji: '🏢', label: 'PG / Hostel Agreement' },
-  { id: 'business',      emoji: '🏗️',  label: 'Enterprise / Business Contract' },
-  { id: 'privacy',       emoji: '🔒', label: 'Online Privacy Policy' },
-  { id: 'terms',         emoji: '📄', label: 'Terms of Service' },
-  { id: 'employment',    emoji: '📑', label: 'Employment / HR Agreement' },
+  { id: 'rent_lease',    label: 'Rent / House Lease' },
+  { id: 'pg_hostel',     label: 'PG / Hostel Agreement' },
+  { id: 'business',      label: 'Enterprise / Business Contract' },
+  { id: 'privacy',       label: 'Online Privacy Policy' },
+  { id: 'terms',         label: 'Terms of Service' },
+  { id: 'employment',    label: 'Employment / HR Agreement' },
 ]
 
 const JURISDICTIONS = [
@@ -82,12 +82,12 @@ export default function DocTypeSelector({ selected, onSelect, jurisdiction, onJu
         style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 10 }}
       >
         {DOC_TYPES.map((dt) => {
-          const isSelected = selected === dt.id
+          const isSelected = selected === dt.label
           return (
             <motion.button
               key={dt.id}
               variants={cardVariants}
-              onClick={() => onSelect(dt.id)}
+              onClick={() => onSelect(dt.label)}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               style={{
@@ -104,7 +104,6 @@ export default function DocTypeSelector({ selected, onSelect, jurisdiction, onJu
                 transition:   'all 200ms ease',
               }}
             >
-              <span style={{ fontSize: 22 }}>{dt.emoji}</span>
               <span style={{ fontSize: 11, fontWeight: 600, color: isSelected ? 'var(--accent)' : 'var(--text)', lineHeight: 1.3 }}>
                 {dt.label}
               </span>

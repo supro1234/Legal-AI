@@ -7,7 +7,7 @@ export const SAMPLES = [
   {
     id: 'rental_bengaluru',
     label: '🏠 Rental Lease (Bengaluru)',
-    docType: 'rent_lease',
+    docType: 'Rent / House Lease',
     text: `RENTAL AGREEMENT
 
 This Rental Agreement is executed at Bengaluru on 1st May 2025.
@@ -35,7 +35,7 @@ Signed in the presence of witnesses.`,
   {
     id: 'employment_nda',
     label: '📑 Employment + NDA',
-    docType: 'employment',
+    docType: 'Employment / HR Agreement',
     text: `EMPLOYMENT AGREEMENT & NON-DISCLOSURE AGREEMENT
 
 Employer: TechCorp India Pvt Ltd (CIN: U72200KA2019PTC123456)
@@ -61,7 +61,7 @@ CTC: INR 8,00,000 per annum
   {
     id: 'privacy_policy',
     label: '🔒 Privacy Policy (App)',
-    docType: 'privacy',
+    docType: 'Online Privacy Policy',
     text: `PRIVACY POLICY — QuickLoan App
 
 Last Updated: March 2025

@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { CheckCircle, XCircle, AlertTriangle, MessageSquare } from 'lucide-react'
 import ResultCard from './ResultCard.jsx'
 import { DisclaimerBanner, ConfidenceScore } from './DisclaimerBanner.jsx'
 
 const TABS = [
-  { key: 'pros',            label: 'Pros ✅' },
-  { key: 'cons',            label: 'Cons ❌' },
-  { key: 'redFlags',        label: 'Red Flags 🚨' },
-  { key: 'negotiationTips', label: 'Negotiate 💬' },
+  { key: 'pros',            label: 'Pros',       Icon: CheckCircle,   iconColor: '#22c55e' },
+  { key: 'cons',            label: 'Cons',       Icon: XCircle,       iconColor: '#ef4444' },
+  { key: 'redFlags',        label: 'Red Flags',  Icon: AlertTriangle, iconColor: '#f59e0b' },
+  { key: 'negotiationTips', label: 'Negotiate',  Icon: MessageSquare, iconColor: '#3b82f6' },
 ]
+
 
 export default function ResultTabs({ result }) {
   const [activeTab, setActiveTab] = useState('pros')
@@ -26,16 +28,20 @@ export default function ResultTabs({ result }) {
 
       {/* ── Tab bar ── */}
       <div className="tab-bar" style={{ marginBottom: 10 }}>
-        {TABS.map((tab) => (
-          <button
-            key={tab.key}
-            className={`tab-btn ${activeTab === tab.key ? 'active' : ''}`}
-            onClick={() => setActiveTab(tab.key)}
-            style={{ fontSize: 11 }}
-          >
-            {tab.label}
-          </button>
-        ))}
+        {TABS.map((tab) => {
+          const { Icon, iconColor } = tab
+          return (
+            <button
+              key={tab.key}
+              className={`tab-btn ${activeTab === tab.key ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.key)}
+              style={{ fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}
+            >
+              <Icon size={12} color={activeTab === tab.key ? '#fff' : iconColor} strokeWidth={2} />
+              {tab.label}
+            </button>
+          )
+        })}
       </div>
 
       {/* ── Tab content ── */}

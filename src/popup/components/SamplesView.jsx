@@ -8,28 +8,29 @@ import { FileText, ChevronRight, CheckCircle, Zap } from 'lucide-react'
 import { SAMPLES } from '../../utils/sampleContracts.js'
 
 const RISK_COLORS = {
-  rent_lease:  { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',  label: 'MEDIUM RISK', icon: '🏠' },
-  employment:  { color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   label: 'HIGH RISK',   icon: '📑' },
-  privacy:     { color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   label: 'HIGH RISK',   icon: '🔒' },
+  'Rent / House Lease':        { color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',  label: 'MEDIUM RISK', icon: '🏠' },
+  'Employment / HR Agreement': { color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   label: 'HIGH RISK',   icon: '📑' },
+  'Online Privacy Policy':     { color: '#ef4444', bg: 'rgba(239,68,68,0.1)',   label: 'HIGH RISK',   icon: '🔒' },
 }
 
 const SAMPLE_META = {
-  rent_lease: {
+  'Rent / House Lease': {
     headline: 'One-sided rental lease with hidden deposit traps',
     tags: ['Security Deposit', 'Lock-In', 'Termination'],
     preview: 'Deposit forfeiture at landlord\'s "sole discretion". No mutual termination notice. Arbitration only in Mumbai.',
   },
-  employment: {
+  'Employment / HR Agreement': {
     headline: 'Aggressive NDA with global non-compete clause',
     tags: ['Non-Compete', 'IP Rights', 'Notice Period'],
     preview: '2-year global non-compete. All personal projects become company IP. 90 days notice from employee only.',
   },
-  privacy: {
+  'Online Privacy Policy': {
     headline: 'Loan app collecting contacts, SMS & always-on location',
     tags: ['DPDP Act', 'Data Sharing', 'Aadhaar'],
     preview: 'Contacts list + SMS access. 24/7 location tracking. Data shared with 500+ partners without consent.',
   },
 }
+
 
 const containerVariants = {
   hidden: {},

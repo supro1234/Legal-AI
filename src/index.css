@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900;1,14..32,400&display=swap');
 
 /* ═══════════════════════════════════════════════════════════════
    LEXGUARD — DESIGN TOKENS
@@ -28,6 +28,13 @@
   --nav-bg:      rgba(9, 10, 15, 0.95);
   --radius:      14px;
   --radius-sm:   10px;
+
+  /* Typography */
+  font-family: 'Inter', sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* ── Light Mode ──────────────────────────────────────────────── */
@@ -54,6 +61,21 @@
   --nav-bg:      rgba(247, 248, 252, 0.96);
   --radius:      14px;
   --radius-sm:   10px;
+}
+
+/* ── Inter everywhere — override any inherited fallbacks ─────── */
+* {
+  font-family: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+p, span, li, input, textarea, button, label, select {
+  font-family: 'Inter', sans-serif;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -109,7 +131,7 @@ html, body {
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 14px;

@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { analyzeWithOpenRouter } from '../../utils/openrouter.js'
-import { DEMO_FALLBACK_RESULT } from '../../utils/sampleContracts.js'
+import { log } from '../../utils/debug.js'
 
 // ── Storage helpers (extension + web) ────────────────────────────────────────
 const HISTORY_KEY = 'lexguard_history'
@@ -48,7 +48,9 @@ export async function loadHistory() {
 }
 
 // ── Timeout + fallback wrapper ────────────────────────────────────────────────
-const API_TIMEOUT_MS = 12000
+// Free OpenRouter models (Llama 4, DeepSeek, Mistral) can take 15–35s.
+// 12s was timing out EVERY request and silently returning the fake fallback.
+const API_TIMEOUT_MS = 60000  // 60 seconds
 
 async function callWithTimeout(apiKey, documentType, safeText, model) {
   const timeoutPromise = new Promise((_, reject) =>
@@ -62,17 +64,15 @@ async function callWithTimeout(apiKey, documentType, safeText, model) {
     return response
   } catch (e) {
     if (e.message === 'timeout') {
-      // Graceful fallback — return demo result tagged as fallback
-      console.warn('[LexGuard] API timeout — using demo fallback result')
-      return {
-        result:    { ...DEMO_FALLBACK_RESULT, _isFallback: true },
-        modelUsed: 'demo-fallback',
-        fromCache: false,
-      }
+      // Surface a clear error — do NOT silently return fake data
+      throw new Error(
+        'Analysis timed out after 60s. Free AI models are sometimes slow. Please try again or switch to a faster model in Settings.'
+      )
     }
     throw e  // re-throw real errors (auth, network, etc.)
   }
 }
+
 
 export function useAnalyze() {
   const [status,    setStatus]    = useState('idle')   // idle | scanning | done | error
@@ -95,6 +95,10 @@ export function useAnalyze() {
       const safeText = contractText.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').slice(0, 8000)
       if (safeText.trim().length < 30) throw new Error('Contract text is too short to analyse.')
 
+      log.analyze('docType received', documentType)
+      log.analyze('model received', model)
+      log.analyze('textLength', safeText.length)
+
       const response = await callWithTimeout(apiKey, documentType, safeText, model)
 
       const scan = {
@@ -115,6 +119,7 @@ export function useAnalyze() {
       setStatus('done')
 
     } catch (err) {
+      log.error('Analysis failed', err.message)
       console.error('[LexGuard]', err.message)
       setError(err.message || 'Analysis failed. Please try again.')
       setStatus('error')
