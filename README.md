@@ -307,9 +307,7 @@ LexGuard AI was designed, built, and shipped by **Team X** — a group of develo
 
 ---
 
-## 📄 License
-
-MIT — Built for hackathons and public good. Not a substitute for professional legal advice.
+## Click Here :   https://legal-ai-black-five.vercel.app/
 
 ---
 
