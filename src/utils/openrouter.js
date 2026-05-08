@@ -10,63 +10,52 @@ const OPENROUTER_URL  = 'https://openrouter.ai/api/v1/chat/completions'
 const OPENROUTER_SITE = 'chrome-extension://lexguard'
 const OPENROUTER_NAME = 'LexGuard AI'
 
-export const DEFAULT_MODEL = "meta-llama/llama-4-scout:free";
+export const DEFAULT_MODEL = "google/gemini-3.1-flash-lite";
 
-// Real free models available on OpenRouter (verified May 2025)
-// Ordered fastest → most capable
+// Real free and paid models available on OpenRouter
 export const OPENROUTER_MODELS = [
+ 
   {
-    id: "meta-llama/llama-4-scout:free",
-    name: "Llama 4 Scout",
+    id: "baidu/cobuddy:free",
+    name: "Baidu: CoBuddy",
     tag: "FREE",
     speed: "Fastest",
-    description: "Meta's fastest free model — recommended for quick scans"
+    description: "High inference throughput and low latency code generation"
   },
   {
-    id: "meta-llama/llama-4-maverick:free",
-    name: "Llama 4 Maverick",
+    id: "google/gemini-3.1-flash-lite",
+    name: "Gemini 3.1 Flash Lite",
+    tag: "FREE",
+    speed: "Fastest",
+    description: "High-efficiency model optimized for low-latency workloads"
+  },
+  {
+    id: "openai/gpt-chat-latest",
+    name: "GPT Chat Latest",
     tag: "FREE",
     speed: "Fast",
-    description: "Higher quality analysis, slightly slower"
+    description: "Always resolves to the latest Instant chat model used in ChatGPT"
   },
   {
-    id: "google/gemma-3-27b-it:free",
-    name: "Gemma 3 27B",
+    id: "~anthropic/claude-haiku-latest",
+    name: "Claude Haiku Latest",
     tag: "FREE",
     speed: "Fast",
-    description: "Google's reliable free model"
+    description: "Anthropic's fast and reliable reasoning model"
   },
   {
-    id: "deepseek/deepseek-r1:free",
-    name: "DeepSeek R1",
+    id: "x-ai/grok-4.3",
+    name: "xAI: Grok 4.3",
     tag: "FREE",
     speed: "Moderate",
-    description: "Strong reasoning, good for complex contracts"
-  },
-
-  {
-    id: "anthropic/claude-3.5-haiku",
-    name: "Claude 3.5 Haiku",
-    tag: "PAID",
-    speed: "Fast",
-    description: "Best accuracy — requires paid API credits"
-  },
-  {
-    id: "openai/gpt-4o-mini",
-    name: "GPT-4o Mini",
-    tag: "PAID",
-    speed: "Fast",
-    description: "OpenAI's cost-efficient model — requires paid API credits"
+    description: "Reasoning model from xAI, good for high factual accuracy"
   }
 ];
 
 // All free model IDs in fallback order — used when a model returns 404/429
 const FREE_FALLBACK_CHAIN = [
-  "meta-llama/llama-4-scout:free",
-  "meta-llama/llama-4-maverick:free",
-  "google/gemma-3-27b-it:free",
-  "deepseek/deepseek-r1:free",
-  "qwen/qwen3-8b:free",
+  "google/gemini-3.1-flash-lite",
+  "baidu/cobuddy:free",
 ];
 
 // ─── CONTRACT COMPRESSION ─────────────────────────────────────────────────────
@@ -543,10 +532,9 @@ export async function testOpenRouterKey(apiKey) {
     return { ok: true, fromCache: true }
   }
 
-  const res = await fetch('https://openrouter.ai/api/v1/models', {
+  const res = await fetch('https://openrouter.ai/api/v1/auth/key', {
     headers: {
       'Authorization': `Bearer ${apiKey}`,
-      'Content-Type':  'application/json',
     },
   })
 

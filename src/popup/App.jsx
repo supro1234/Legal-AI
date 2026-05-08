@@ -18,6 +18,8 @@ import ExportButton     from './components/ExportButton.jsx'
 import Onboarding, { clearSession } from './components/Onboarding.jsx'
 import UpcomingFeatures from './components/UpcomingFeatures.jsx'
 import SamplesView      from './components/SamplesView.jsx'
+import SettingsTab      from './components/SettingsTab.jsx'
+import { Settings } from 'lucide-react'
 
 /* ── Shield state helper ────────────────────────────────────── */
 function deriveShieldState(analyzeStatus, result, onboarded) {
@@ -137,6 +139,24 @@ export default function App() {
     setActiveTab('analyze')
   }, [reset])
 
+  const handleModelChange = useCallback((newModel) => {
+    setSelectedModel(newModel)
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+      chrome.storage.local.set({ selectedModel: newModel })
+    } else {
+      localStorage.setItem('selectedModel', newModel)
+    }
+  }, [])
+
+  const handleApiKeyChange = useCallback((newKey) => {
+    setApiKey(newKey)
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+      chrome.storage.session.set({ openrouterKey: newKey })
+    } else {
+      sessionStorage.setItem('openrouterKey', newKey)
+    }
+  }, [])
+
   const handleLogout = useCallback(() => {
     // Clear session storage (API key wiped) and return to onboarding
     clearSession()
@@ -227,36 +247,58 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Centre: model badge */}
+                {/* Centre: model badge (clickable to settings) */}
                 <AnimatePresence mode="wait">
-                  <motion.span
+                  <motion.div
                     key={badgeLabel}
                     initial={{ scale: 0.8, opacity: 0, y: -4 }}
                     animate={{ scale: 1,   opacity: 1, y: 0 }}
                     exit={{    scale: 0.8, opacity: 0, y: 4 }}
                     transition={{ duration: 0.2 }}
-                    style={{
-                      fontSize: 9, fontWeight: 700, padding: '3px 10px', borderRadius: 99,
-                      background: fromCache
-                        ? 'rgba(16,185,129,0.15)'
-                        : 'var(--accent-dim)',
-                      color:  fromCache ? 'var(--success)' : 'var(--accent)',
-                      border: fromCache
-                        ? '1px solid rgba(16,185,129,0.3)'
-                        : '1px solid var(--border-hi)',
-                      letterSpacing: '0.04em',
-                      maxWidth: 140, overflow: 'hidden',
-                      textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                    }}
-                    title={modelUsed || selectedModel}
+                    style={{ position: 'relative', display: 'inline-block' }}
                   >
-                    {fromCache ? '⚡ ' : '✦ '}{badgeLabel}
-                  </motion.span>
+                    <button
+                      onClick={() => setActiveTab('settings')}
+                      title="Change AI Model"
+                      style={{
+                        appearance: 'none',
+                        WebkitAppearance: 'none',
+                        fontSize: 9, fontWeight: 700, padding: '4px 12px', borderRadius: 99,
+                        background: fromCache
+                          ? 'rgba(16,185,129,0.15)'
+                          : 'var(--accent-dim)',
+                        color:  fromCache ? 'var(--success)' : 'var(--accent)',
+                        border: fromCache
+                          ? '1px solid rgba(16,185,129,0.3)'
+                          : '1px solid var(--border-hi)',
+                        letterSpacing: '0.04em',
+                        maxWidth: 160, overflow: 'hidden',
+                        textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                        cursor: 'pointer', outline: 'none', fontFamily: 'inherit',
+                        display: 'flex', alignItems: 'center', gap: 6,
+                      }}
+                    >
+                      {fromCache ? '⚡ ' : '✦ '}{badgeLabel}
+                    </button>
+                  </motion.div>
                 </AnimatePresence>
 
-                {/* Right: theme toggle + logout + fullscreen */}
+                {/* Right: theme toggle + settings + logout + fullscreen */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <ThemeToggle theme={theme} onToggle={toggleTheme} />
+
+                  {/* Settings button */}
+                  <motion.button
+                    whileHover={{ scale: 1.08 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setActiveTab('settings')}
+                    className="header-icon-btn"
+                    title="Settings"
+                    aria-label="Settings"
+                    style={{ color: 'var(--muted)' }}
+                  >
+                    <Settings size={14} />
+                  </motion.button>
 
                   {/* Logout button */}
                   <motion.button
@@ -462,6 +504,22 @@ export default function App() {
                       initial="hidden" animate="visible" exit="exit"
                     >
                       <UpcomingFeatures onClose={() => setActiveTab('analyze')} inline />
+                    </motion.div>
+
+                  ) : activeTab === 'settings' ? (
+                    /* ── SETTINGS TAB (inline) ── */
+                    <motion.div
+                      key="settings"
+                      variants={pageVariants}
+                      initial="hidden" animate="visible" exit="exit"
+                    >
+                      <SettingsTab
+                        apiKey={apiKey}
+                        onApiKeyChange={handleApiKeyChange}
+                        selectedModel={selectedModel}
+                        onModelChange={handleModelChange}
+                        onSave={() => setActiveTab('analyze')}
+                      />
                     </motion.div>
 
                   ) : null}

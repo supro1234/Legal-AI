@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Settings } from 'lucide-react'
 import { OPENROUTER_MODELS, DEFAULT_MODEL } from '../../utils/openrouter.js'
 
 export default function AIModelPicker() {
@@ -16,8 +15,17 @@ export default function AIModelPicker() {
     }
   }, [])
 
-  const model = OPENROUTER_MODELS.find(m => m.id === selectedModel) ||
-    OPENROUTER_MODELS.find(m => m.id === DEFAULT_MODEL)
+  const handleChange = (e) => {
+    const newModel = e.target.value
+    setSelectedModel(newModel)
+    if (typeof chrome !== 'undefined' && chrome.storage) {
+      chrome.storage.local.set({ selectedModel: newModel })
+    } else {
+      localStorage.setItem('selectedModel', newModel)
+    }
+  }
+
+  const model = OPENROUTER_MODELS.find(m => m.id === selectedModel) || OPENROUTER_MODELS.find(m => m.id === DEFAULT_MODEL)
 
   if (!model) return null
 
@@ -27,33 +35,41 @@ export default function AIModelPicker() {
       animate={{ opacity: 1, y: 0 }}
       style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500 }}>AI Model:</span>
-        <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{model.name}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%' }}>
+        <span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>AI Model:</span>
+        <select
+          value={selectedModel || DEFAULT_MODEL}
+          onChange={handleChange}
+          style={{
+            flex: 1,
+            padding: '4px 8px',
+            borderRadius: '6px',
+            background: 'var(--card-bg)',
+            color: 'var(--text)',
+            border: '1px solid var(--border)',
+            fontSize: '12px',
+            fontFamily: 'inherit',
+            fontWeight: 600,
+            cursor: 'pointer',
+            outline: 'none',
+          }}
+        >
+          {OPENROUTER_MODELS.map(m => (
+            <option key={m.id} value={m.id}>
+              {m.name} ({m.tag})
+            </option>
+          ))}
+        </select>
         <span style={{
           fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 99,
           background: model.tag === 'FREE' ? 'rgba(16,185,129,0.15)' : 'rgba(245,158,11,0.15)',
           color:      model.tag === 'FREE' ? 'var(--success)'         : 'var(--warning)',
           border:     model.tag === 'FREE' ? '1px solid rgba(16,185,129,0.3)' : '1px solid rgba(245,158,11,0.3)',
+          whiteSpace: 'nowrap'
         }}>
           {model.tag}
         </span>
-        <span style={{ fontSize: 10, color: 'var(--muted)' }}>{model.speed}</span>
       </div>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => { if (typeof chrome !== 'undefined' && chrome.runtime) chrome.runtime.openOptionsPage() }}
-        title="Change model in Settings"
-        style={{
-          display: 'flex', alignItems: 'center', gap: 4,
-          fontSize: 11, color: 'var(--accent2)', fontWeight: 600,
-          background: 'transparent', border: 'none', cursor: 'pointer',
-          padding: '4px 8px', borderRadius: 6, fontFamily: 'inherit',
-        }}
-      >
-        <Settings size={12} /> Change
-      </motion.button>
     </motion.div>
   )
 }
