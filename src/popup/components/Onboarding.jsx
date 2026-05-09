@@ -5,6 +5,7 @@ import {
   ArrowRight, ExternalLink, LogOut,
 } from 'lucide-react'
 import { testOpenRouterKey, OPENROUTER_MODELS, DEFAULT_MODEL } from '../../utils/openrouter.js'
+import WelcomeCalligraphy from '../../components/WelcomeCalligraphy.jsx'
 
 /* ── Storage helpers ────────────────────────────────────────── */
 function saveSession(apiKey) {
@@ -90,9 +91,15 @@ export default function Onboarding({ onComplete }) {
           />
         </motion.div>
 
-        <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em' }}>
-          Welcome to LexGuard
-        </h2>
+        <div style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          paddingTop: "24px",
+          paddingBottom: "16px"
+        }}>
+          <WelcomeCalligraphy subtitle="to LexGuard AI" />
+        </div>
         <p style={{ margin: '8px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 1.55, maxWidth: 320, marginInline: 'auto' }}>
           Connect one OpenRouter key to access all AI models — free &amp; paid.
           Your key is stored only for this session and cleared when you close the browser.

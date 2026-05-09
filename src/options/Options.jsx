@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
 import { testOpenRouterKey, OPENROUTER_MODELS, DEFAULT_MODEL } from '../utils/openrouter'
+import WelcomeCalligraphy from '../components/WelcomeCalligraphy'
 
 async function fetchLiveFreeModels(apiKey) {
   try {
@@ -86,7 +87,15 @@ export default function Options() {
 
   return (
     <div style={{ padding: 28, maxWidth: 480, margin: '0 auto', fontFamily: "'Inter', sans-serif", background: '#06060f', color: '#f1f5f9', minHeight: '100vh' }}>
-      <h2 style={{ margin: '0 0 4px', fontSize: 20, fontWeight: 800 }}>🛡️ LexGuard — Settings</h2>
+      <div style={{
+        textAlign: "center",
+        paddingTop: "24px",
+        paddingBottom: "16px",
+        borderBottom: "1px solid var(--color-border-tertiary, #1e293b)",
+        marginBottom: "20px"
+      }}>
+        <WelcomeCalligraphy subtitle="API Configuration" />
+      </div>
       <p style={{ color: '#94a3b8', fontSize: 13, margin: '0 0 28px' }}>
         One key controls access to all AI models.
       </p>
